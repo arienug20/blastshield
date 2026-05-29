@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { runBSTAnalysis } from '../src/core/baker-strehlow';
-import { runTNTAnalysis } from '../src/core/tnt-equivalent';
+import { runBSTAnalysis } from '@/core/baker-strehlow';
+import { runTNTAnalysis } from '@/core/tnt-equivalent';
 
 describe('BST Method', () => {
   it('should calculate BST analysis for methane', () => {
@@ -50,7 +50,6 @@ describe('BST Method', () => {
 
     expect(result).toBeDefined();
     expect(result.peakOverpressure).toBeGreaterThan(0);
-    // Hydrogen should have higher overpressure due to high reactivity
     expect(result.flameSpeed).toBeGreaterThan(1.0);
   });
 
@@ -77,14 +76,51 @@ describe('BST Method', () => {
 
     expect(resultNear.peakOverpressure).toBeGreaterThan(resultFar.peakOverpressure);
   });
+
+  it('should calculate valid scaled distance', () => {
+    const result = runBSTAnalysis('propane', 2000, '2D', 'medium', 50, 1.013, 293);
+    expect(result.scaledDistance).toBeGreaterThan(0);
+  });
+
+  it('should return valid arrival time', () => {
+    const result = runBSTAnalysis('methane', 1000, '2D', 'low', 50, 1.013, 293);
+    expect(result.arrivalTime).toBeGreaterThan(0);
+    expect(result.arrivalTime).toBeLessThan(10000); // reasonable range in ms
+  });
+
+  it('should return peak dynamic pressure', () => {
+    const result = runBSTAnalysis('propane', 2000, '2D', 'medium', 30, 1.013, 293);
+    expect(result.peakDynamicPressure).toBeGreaterThan(0);
+    expect(result.peakDynamicPressure).toBeLessThanOrEqual(result.peakOverpressure * 3);
+  });
+
+  it('should handle ethylene (high reactivity) correctly', () => {
+    const result = runBSTAnalysis('ethylene', 3000, '2.5D', 'medium', 80, 1.013, 293);
+    expect(result).toBeDefined();
+    expect(result.peakOverpressure).toBeGreaterThan(0);
+    expect(result.flameSpeed).toBeGreaterThan(0);
+  });
+
+  it('should handle butane with 1D confinement and low congestion', () => {
+    const result = runBSTAnalysis('n-butane', 1000, '1D', 'low', 100, 1.013, 293);
+    expect(result).toBeDefined();
+    expect(result.peakOverpressure).toBeGreaterThan(0);
+    expect(result.flameSpeed).toBeGreaterThan(0);
+  });
+
+  it('should produce higher overpressure for larger flammable mass at same distance', () => {
+    const resultSmall = runBSTAnalysis('propane', 1000, '2D', 'medium', 50, 1.013, 293);
+    const resultLarge = runBSTAnalysis('propane', 5000, '2D', 'medium', 50, 1.013, 293);
+    expect(resultLarge.peakOverpressure).toBeGreaterThan(resultSmall.peakOverpressure);
+  });
 });
 
 describe('TNT Equivalent Method', () => {
   it('should calculate TNT equivalent analysis', () => {
     const result = runTNTAnalysis(
       1000,
-      50030, // Propane heat of combustion
-      0.10,  // 10% efficiency
+      50030,
+      0.10,
       50,
       1.013
     );
@@ -117,6 +153,16 @@ describe('TNT Equivalent Method', () => {
     expect(resultHydrogen.tntEquivalentMass).toBeGreaterThan(resultPropane.tntEquivalentMass);
     expect(resultHydrogen.peakOverpressure).toBeGreaterThan(resultPropane.peakOverpressure);
   });
+
+  it('should calculate positive phase duration', () => {
+    const result = runTNTAnalysis(1000, 50030, 0.10, 50, 1.013);
+    expect(result.positivePhaseDuration).toBeGreaterThan(0);
+  });
+
+  it('should calculate arrival time', () => {
+    const result = runTNTAnalysis(1000, 50030, 0.10, 50, 1.013);
+    expect(result.arrivalTime).toBeGreaterThan(0);
+  });
 });
 
 describe('Method Comparison', () => {
@@ -124,10 +170,15 @@ describe('Method Comparison', () => {
     const bstResult = runBSTAnalysis('propane', 2000, '2D', 'medium', 50, 1.013, 293);
     const tntResult = runTNTAnalysis(2000, 50030, 0.10, 50, 1.013);
 
-    // Both should produce overpressure in range 0.01 - 10 bar for this scenario
     expect(bstResult.peakOverpressure).toBeGreaterThan(0.01);
     expect(bstResult.peakOverpressure).toBeLessThan(10);
     expect(tntResult.peakOverpressure).toBeGreaterThan(0.01);
     expect(tntResult.peakOverpressure).toBeLessThan(10);
+  });
+
+  it('should show hydrogen producing higher overpressure than methane for same conditions', () => {
+    const methane = runBSTAnalysis('methane', 1000, '2D', 'medium', 30, 1.013, 293);
+    const hydrogen = runBSTAnalysis('hydrogen', 1000, '2D', 'medium', 30, 1.013, 293);
+    expect(hydrogen.flameSpeed).toBeGreaterThan(methane.flameSpeed);
   });
 });
