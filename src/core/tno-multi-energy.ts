@@ -1,4 +1,4 @@
-import { TNOOutput } from '../types';
+import type { TNOOutput } from '../types';
 
 /**
  * TNO Multi-Energy Method for VCE Blast Analysis

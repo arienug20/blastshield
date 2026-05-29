@@ -1,4 +1,4 @@
-import { FuelProperties, ReactivityClass } from '../types';
+import type { FuelProperties, ReactivityClass } from '../types';
 
 /**
  * Fuel Library with properties for VCE analysis

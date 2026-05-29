@@ -1,4 +1,4 @@
-import { CongestionLevel } from '../types';
+import type { CongestionLevel } from '../types';
 
 /**
  * Congestion Assessment Tool

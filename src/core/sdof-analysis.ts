@@ -1,4 +1,4 @@
-import { SDOFOutput, BoundaryCondition } from '../types';
+import type { SDOFOutput, BoundaryCondition } from '../types';
 
 /**
  * SDOF Analysis using Newmark-β Method

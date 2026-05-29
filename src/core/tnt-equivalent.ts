@@ -1,4 +1,4 @@
-import { TNTOutput } from '../types';
+import type { TNTOutput } from '../types';
 
 /**
  * TNT Equivalent Method for VCE Blast Analysis

@@ -1,4 +1,4 @@
-import { ConnectionOutput } from '../types';
+import type { ConnectionOutput } from '../types';
 
 /**
  * Connection and Anchor Design

@@ -1,4 +1,4 @@
-import { FuelProperties, ConfinementLevel, CongestionLevel, BSTOutput } from '../types';
+import type { FuelProperties, ConfinementLevel, CongestionLevel, BSTOutput } from '../types';
 import { fuelLibrary } from '../data/fuel-library';
 
 /**

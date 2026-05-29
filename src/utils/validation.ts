@@ -2,7 +2,7 @@
  * Input Validation Utilities
  */
 
-import { ConfinementLevel, CongestionLevel, WallType, BoundaryCondition } from '../types';
+import type { ConfinementLevel, CongestionLevel, WallType, BoundaryCondition } from '../types';
 
 /**
  * Validate a positive number

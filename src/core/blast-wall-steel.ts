@@ -1,4 +1,4 @@
-import { BlastWallOutput, BoundaryCondition } from '../types';
+import type { BlastWallOutput, BoundaryCondition } from '../types';
 
 /**
  * Steel Plate Blast Wall Sizing (Yield Line Theory)

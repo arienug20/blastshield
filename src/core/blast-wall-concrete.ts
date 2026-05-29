@@ -1,4 +1,4 @@
-import { BlastWallOutput, BoundaryCondition } from '../types';
+import type { BlastWallOutput, BoundaryCondition } from '../types';
 
 /**
  * Reinforced Concrete Blast Wall Sizing (Ultimate Strength Method)

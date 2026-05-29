@@ -1,4 +1,4 @@
-import { BSTOutput, TNTOutput, TNOOutput, SafeDistanceResult } from '../types';
+import type { BSTOutput, TNTOutput, TNOOutput, SafeDistanceResult } from '../types';
 
 /**
  * Safe Distance Calculator
