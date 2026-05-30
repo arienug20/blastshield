@@ -38,13 +38,13 @@ export const VceCalculator: React.FC = () => {
       let tno: number | null = null;
       try {
         bst = runBSTAnalysis(fuelId, flammableMass, confinement, congestion, d, 1.013, 293).peakOverpressure;
-      } catch {}
+      } catch (_e) { /* skip */ }
       try {
         tnt = runTNTAnalysis(flammableMass, fuel.heatOfCombustion, 0.10, d, 1.013).peakOverpressure;
-      } catch {}
+      } catch (_e) { /* skip */ }
       try {
         tno = runTNOAnalysis(5, 1000, d, 1.013).peakOverpressure;
-      } catch {}
+      } catch (_e) { /* skip */ }
       return { distance: d, bst, tnt, tno };
     });
     setChartData(data);
